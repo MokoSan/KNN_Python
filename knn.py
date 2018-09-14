@@ -40,12 +40,8 @@ class KNNRegression( object ):
 
     def __average_neighbors( self, neighbors ):
         length = len( neighbors )
-        sum_of_dimensions = len( neighbors[ 0 ][ 1 ]) * [ 0 ] 
-        for i in range( length ):
-            training_point = neighbors[ i ][ 1 ]
-            for t in range( len( training_point )):
-                sum_of_dimensions[ t ] += training_point[ t ]
-        return [ s / len( neighbors ) for s in sum_of_dimensions ]
+        neighbor_distance = list( map( lambda x : x[1], neighbors ))
+        return [ sum( x ) / length for x in zip( *neighbor_distance ) ]
 
     def predict( self, data_point, k ):
         '''
@@ -62,7 +58,7 @@ class KNNRegression( object ):
         return self.__average_neighbors( nearest_neighbors )
 
 if __name__ == '__main__':
+    # TODO: Move over to Unit tests..
     knn = KNNRegression()
     knn.train( [ [0,0,2], [ 3,4,5 ], [ 5, 5, 5 ]], EuclideanDistance() )
     print( knn.predict( [ 2, 3, 4 ], 3 ))
-    print( "Successfully created KNN.")
